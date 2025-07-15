@@ -13,6 +13,8 @@ export function setupEventListeners(root) {
     "keydown",
     "keyup",
     "keypress",
+    "focus",
+    "blur",
   ];
 
   allEventTypes.forEach((type) => {
