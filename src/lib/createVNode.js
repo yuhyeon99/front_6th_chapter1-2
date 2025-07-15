@@ -1,9 +1,9 @@
 import { flattenChildren } from "../utils/createVNode/flattenChildren";
-import { removeFalsyChildren } from "../utils/createVNode/normalizeChildren";
+import { isValidChild } from "../utils/common/validChildren.js";
 
 export function createVNode(type, props, ...children) {
   const flat = flattenChildren(children);
-  const normalized = removeFalsyChildren(flat);
+  const normalized = flat.filter(isValidChild);
 
   return {
     type,
