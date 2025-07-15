@@ -46,4 +46,19 @@ export function addEvent(element, eventType, handler) {
   typeMap.get(eventType).add(handler);
 }
 
-// export function removeEvent(element, eventType, handler) {}
+export function removeEvent(element, eventType, handler) {
+  const typeMap = eventMap.get(element);
+  if (!typeMap) return;
+  const handlers = typeMap.get(eventType);
+  if (!handlers) return;
+
+  handlers.delete(handler);
+
+  if (handlers.size === 0) {
+    typeMap.delete(eventType);
+  }
+
+  if (typeMap.size === 0) {
+    eventMap.delete(element);
+  }
+}
