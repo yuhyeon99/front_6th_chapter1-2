@@ -15,6 +15,9 @@ export function setupEventListeners(root) {
     "keypress",
     "focus",
     "blur",
+    "change",
+    "input",
+    "submit",
   ];
 
   allEventTypes.forEach((type) => {
