@@ -17,11 +17,9 @@ export function createElement(vNode) {
   // 3. 배열 -> DocumentFragment
   //   - 배열일 경우 각 요소를 createElement로 재귀 호출한 후 하나의 DocumentFragment로 반환
   if (Array.isArray(vNode)) {
-    console.log("배열 처리", vNode);
     const fragment = document.createDocumentFragment();
     vNode.forEach((child) => {
       const childEl = createElement(child);
-      console.log("배열 요소 처리", child, childEl);
       if (childEl) {
         fragment.appendChild(childEl);
       }
