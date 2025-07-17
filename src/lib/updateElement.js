@@ -99,7 +99,7 @@ export function updateElement(parentElement, newNode, oldNode, index = 0) {
   const oldChildren = oldNode.children || [];
   const maxLen = Math.max(newChildren.length, oldChildren.length);
 
-  for (let i = 0; i < maxLen; i++) {
-    updateElement(existingDom ?? parentElement, newChildren[i], oldChildren[i], i);
+  for (let i = maxLen - 1; i >= 0; i--) {
+    updateElement(existingDom, newChildren[i], oldChildren[i], i);
   }
 }
