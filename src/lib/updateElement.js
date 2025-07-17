@@ -97,9 +97,21 @@ export function updateElement(parentElement, newNode, oldNode, index = 0) {
   // 6. 자식 노드 diff
   const newChildren = newNode.children || [];
   const oldChildren = oldNode.children || [];
-  const maxLen = Math.max(newChildren.length, oldChildren.length);
+  const newLength = newChildren.length;
+  const oldLength = oldChildren.length;
 
-  for (let i = maxLen - 1; i >= 0; i--) {
+  // 1. 자식 노드 업데이트 (공통 길이만큼)
+  for (let i = 0; i < newLength; i++) {
     updateElement(existingDom, newChildren[i], oldChildren[i], i);
+  }
+
+  // 2. 남는 old 자식 노드들 제거 (뒤에서부터)
+  if (oldLength > newLength) {
+    for (let i = oldLength - 1; i >= newLength; i--) {
+      const childToRemove = existingDom.childNodes[i];
+      if (childToRemove) {
+        existingDom.removeChild(childToRemove);
+      }
+    }
   }
 }
