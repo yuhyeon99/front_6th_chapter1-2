@@ -87,13 +87,10 @@ function updateAttributes($el, props = {}) {
 
     // 5. boolean 속성 처리 (disabled, checked 등)
     if (typeof value === "boolean") {
-      if (value) {
-        $el.setAttribute(key, "");
-        $el[key] = true;
-      } else {
-        $el.removeAttribute(key);
-        $el[key] = false;
-      }
+      const needsAttr = key === "disabled" || key === "readOnly";
+      const attrName = key === "readOnly" ? "readonly" : key;
+      $el[key] = value;
+      value && needsAttr ? $el.setAttribute(attrName, "") : $el.removeAttribute(attrName);
       return;
     }
 

@@ -5,6 +5,22 @@ function updateAttributes(target, originNewProps, originOldProps) {
   const isEventProp = (key) => /^on[A-Z]/.test(key);
   const getEventName = (key) => key.slice(2).toLowerCase();
 
+  const setBoolean = (key, val) => {
+    // 1. DOM 프로퍼티
+    target[key] = !!val;
+
+    // 2. 속성이 필요한 녀석(disabled, readonly)은 빈 문자열로,
+    //    그렇지 않은 녀석(checked, selected)은 제거
+    const needsAttr = key === "disabled" || key === "readOnly";
+    const attrName = key === "readOnly" ? "readonly" : key; // HTML 속성은 소문자
+
+    if (val) {
+      needsAttr ? target.setAttribute(attrName, "") : target.removeAttribute(attrName);
+    } else {
+      target.removeAttribute(attrName);
+    }
+  };
+
   // 추가 또는 변경된 속성
   for (const [key, value] of Object.entries(originNewProps)) {
     if (originOldProps[key] === value) continue;
@@ -13,8 +29,13 @@ function updateAttributes(target, originNewProps, originOldProps) {
       const eventName = getEventName(key);
       if (originOldProps[key]) removeEvent(target, eventName, originOldProps[key]);
       addEvent(target, eventName, value);
+    } else if (key === "className") {
+      // className: 빈 문자열이면 속성을 지우고, 아니면 교체
+      value ? target.setAttribute("class", value) : target.removeAttribute("class");
+    } else if (typeof value === "boolean") {
+      setBoolean(key, value);
     } else {
-      target.setAttribute(key === "className" ? "class" : key, value);
+      target.setAttribute(key, value);
     }
   }
 
@@ -23,8 +44,12 @@ function updateAttributes(target, originNewProps, originOldProps) {
     if (!(key in originNewProps)) {
       if (isEventProp(key)) {
         removeEvent(target, getEventName(key), originOldProps[key]);
+      } else if (key === "className") {
+        target.removeAttribute("class");
+      } else if (typeof originOldProps[key] === "boolean") {
+        setBoolean(key, false);
       } else {
-        target.removeAttribute(key === "className" ? "class" : key);
+        target.removeAttribute(key);
       }
     }
   }
