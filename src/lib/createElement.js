@@ -1,5 +1,14 @@
 import { addEvent } from "./eventManager";
 
+/**
+ * 가상 DOM 노드를 실제 DOM 요소로 변환합니다.
+ * 이 함수는 다양한 타입의 가상 노드(null, boolean, string, number, array, object)를 처리하여
+ * 적절한 DOM 요소를 생성하고 반환합니다.
+ *
+ * @param {import('./createVNode').VNode | string | number | boolean | null | undefined} vNode - 변환할 가상 DOM 노드.
+ * @returns {Node | null} 생성된 DOM 요소 또는 null.
+ * @throws {Error} 정규화되지 않은 컴포넌트(함수 형태)가 전달될 경우 에러를 발생시킵니다.
+ */
 export function createElement(vNode) {
   // 1. null, undefined, boolean -> 빈 텍스트 노드
   if (vNode === null || vNode === undefined || typeof vNode === "boolean") {
@@ -53,6 +62,14 @@ export function createElement(vNode) {
   return null;
 }
 
+/**
+ * DOM 요소의 속성을 설정하거나 업데이트합니다.
+ * 이벤트 리스너, className, style 객체, 데이터 속성, 불리언 속성 등
+ * 다양한 종류의 속성을 적절하게 처리합니다.
+ *
+ * @param {HTMLElement} $el - 속성을 적용할 DOM 요소.
+ * @param {Object<string, any>} [props={}] - 적용할 속성 객체.
+ */
 function updateAttributes($el, props = {}) {
   Object.entries(props).forEach(([key, value]) => {
     // 1. 이벤트 처리 (예: onClick)

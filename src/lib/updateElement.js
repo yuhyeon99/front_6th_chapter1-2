@@ -1,6 +1,14 @@
 import { addEvent, removeEvent } from "./eventManager";
 import { createElement } from "./createElement.js";
 
+/**
+ * DOM 요소의 속성을 이전 속성과 비교하여 업데이트합니다.
+ * 이벤트 핸들러, className, boolean 속성 등을 효율적으로 추가, 제거 또는 변경합니다.
+ *
+ * @param {HTMLElement} target - 속성을 업데이트할 실제 DOM 요소.
+ * @param {Object<string, any>} originNewProps - 새로운 속성 객체.
+ * @param {Object<string, any>} originOldProps - 이전 속성 객체.
+ */
 function updateAttributes(target, originNewProps, originOldProps) {
   const isEventProp = (key) => /^on[A-Z]/.test(key);
   const getEventName = (key) => key.slice(2).toLowerCase();
@@ -55,6 +63,16 @@ function updateAttributes(target, originNewProps, originOldProps) {
   }
 }
 
+/**
+ * 가상 DOM 노드(VNode)의 변경 사항을 실제 DOM에 반영합니다.
+ * 이전 VNode와 새로운 VNode를 비교하여 DOM 요소를 효율적으로 추가, 제거, 교체 또는 업데이트합니다.
+ * 재귀적으로 자식 노드들의 변경 사항도 처리합니다.
+ *
+ * @param {HTMLElement} parentElement - 변경이 일어날 부모 DOM 요소.
+ * @param {import('./createVNode').VNode | string | number | boolean | null | undefined} newNode - 새로운 가상 DOM 노드.
+ * @param {import('./createVNode').VNode | string | number | boolean | null | undefined} oldNode - 이전 가상 DOM 노드.
+ * @param {number} [index=0] - 현재 처리 중인 자식 노드의 인덱스.
+ */
 export function updateElement(parentElement, newNode, oldNode, index = 0) {
   const existingDom = parentElement.childNodes[index];
 
